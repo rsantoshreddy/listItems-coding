@@ -47,7 +47,6 @@
 
   var addTask = function() {
     const inputValue = taskInput.value;
-    document.getElementById('demo').innerHTML = inputValue ? '' : 'Please Enter Something!!!';
     if (inputValue) {
       todoList.push(inputValue);
       localStorage.setItem('todoList', JSON.stringify(todoList));
@@ -55,6 +54,9 @@
       incompleteTasksHolder.appendChild(listItem);
       bindTaskEvents(listItem, taskCompleted);
       taskInput.value = '';
+      document.getElementById('demo').innerHTML = '';
+    } else {
+      document.getElementById('demo').innerHTML = 'Please Enter Something!!!';
     }
   };
 
@@ -117,12 +119,17 @@
   var taskCompleted = function(el) {
     var listItem = this.parentNode;
     completedTasksHolder.appendChild(listItem);
+
     bindTaskEvents(listItem, taskIncomplete);
+
     var value = this.parentNode.children[1].innerText;
+
     todoList = todoList.filter(function(todo) {
       return todo !== value;
     });
+
     completedList.push(value);
+
     localStorage.setItem('todoList', JSON.stringify(todoList));
     localStorage.setItem('completedList', JSON.stringify(completedList));
   };
@@ -131,10 +138,13 @@
     var listItem = this.parentNode;
     incompleteTasksHolder.appendChild(listItem);
     bindTaskEvents(listItem, taskCompleted);
+
     var value = this.parentNode.children[1].innerText;
+
     completedList = completedList.filter(function(todo) {
       return todo !== value;
     });
+
     todoList.push(value);
     localStorage.setItem('todoList', JSON.stringify(todoList));
     localStorage.setItem('completedList', JSON.stringify(completedList));
@@ -151,11 +161,13 @@
 
   addButton.addEventListener('click', addTask);
 
-  for (var i = 0; i < incompleteTasksHolder.children.length; i++) {
+  var initTodoLength = incompleteTasksHolder.children.length;
+  for (var i = 0; i < initTodoLength; i++) {
     bindTaskEvents(incompleteTasksHolder.children[i], taskCompleted);
   }
 
-  for (var i = 0; i < completedTasksHolder.children.length; i++) {
+  var initCompletedList = completedTasksHolder.children.length;
+  for (var i = 0; i < initCompletedList; i++) {
     bindTaskEvents(completedTasksHolder.children[i], taskIncomplete);
   }
 })();
