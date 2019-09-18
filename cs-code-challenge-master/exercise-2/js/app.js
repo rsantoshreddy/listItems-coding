@@ -80,8 +80,6 @@
   };
 
   function handleEditTodo(event) {
-    console.log(event.target.value);
-    console.log(currentEditText);
     todoList = todoList.map(function(todo) {
       if (todo === currentEditText) {
         return event.target.value;
@@ -99,11 +97,21 @@
       value = label.innerText;
     }
     var ul = listItem.parentNode;
+
+    if (ul.id === 'completed-tasks') {
+      completedList = completedList.filter(function(todo) {
+        return todo !== value;
+      });
+      localStorage.setItem('completedList', JSON.stringify(completedList));
+    } else {
+      todoList = todoList.filter(function(todo) {
+        return todo !== value;
+      });
+
+      localStorage.setItem('todoList', JSON.stringify(todoList));
+    }
+
     ul.removeChild(listItem);
-    todoList = todoList.filter(function(todo) {
-      return todo !== value;
-    });
-    localStorage.setItem('todoList', JSON.stringify(todoList));
   };
 
   var taskCompleted = function(el) {
